@@ -18,9 +18,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'cookbook.apps.CookbookConfig',
-
+    'rest_framework',
+    'djoser',
+    'rest_framework_simplejwt',
+    'django_filters',
     'sorl.thumbnail',
+
+    'cookbook.apps.CookbookConfig',
+    'api.apps.ApiConfig',
+    'users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
