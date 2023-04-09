@@ -1,4 +1,4 @@
-name: foodgram-proeject-react workflow
+name: foodgram-project-react workflow
 
 on: [push]
 
@@ -6,7 +6,7 @@ jobs:
   tests:
     name: Check for pep8
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/master' or 'refs/heads/main'
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python 
