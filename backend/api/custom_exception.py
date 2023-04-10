@@ -1,0 +1,2 @@
+class GetRecipesError(Exception):
+    pass

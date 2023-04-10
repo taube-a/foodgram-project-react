@@ -9,7 +9,7 @@ env = dict(dotenv_values('../infra/.env'))
 
 SECRET_KEY = (env.get('SECRET_KEY') or os.getenv('SECRET_KEY'))
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*', ]
 

@@ -1,9 +1,12 @@
-from cookbook.models import Ingredient, IngredientAmount, Recipe, Tag
 from django.db import transaction
 from djoser import serializers as djoser_serializers
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers as serializers
+
+from cookbook.models import Ingredient, IngredientAmount, Recipe, Tag
 from users.models import Follow, User
+
+from .custom_exception import GetRecipesError
 
 
 class RecipeShortSerializer(serializers.ModelSerializer):
@@ -53,8 +56,9 @@ class UserWithRecipesSerializer(UserSerializer):
             try:
                 recipes_limit = int(recipes_limit)
                 queryset = queryset[:recipes_limit]
-            except (TypeError, ValueError):
-                pass
+            except (TypeError, ValueError) as error:
+                raise GetRecipesError('Ошибка при получении списка рецептов. '
+                                      f'Детали: {error}.')
         return RecipeShortSerializer(queryset, many=True).data
 
     def get_recipes_count(self, user_object):
@@ -170,7 +174,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         return RecipeListSerializer(instance, context=self.context).data
 
     @staticmethod
-    def create_ingredientamount(recipe, ingredientamount_set):
+    def create_ingredient_amounts(recipe, ingredientamount_set):
         IngredientAmount.objects.bulk_create(
             [
                 IngredientAmount(
@@ -189,7 +193,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         instance = Recipe.objects.create(
             author=request.user,
             **validated_data, )
-        RecipeSerializer.create_ingredientamount(
+        RecipeSerializer.create_ingredient_amounts(
             instance,
             ingredientamount_set, )
         instance.tags.set(tags)
@@ -201,7 +205,7 @@ class RecipeSerializer(serializers.ModelSerializer):
             ingredientamount_set = validated_data.pop('ingredientamount_set')
             if ingredientamount_set:
                 instance.ingredients.clear()
-            RecipeSerializer.create_ingredientamount(
+            RecipeSerializer.create_ingredient_amounts(
                 instance, ingredientamount_set
             )
         return super().update(instance, validated_data)

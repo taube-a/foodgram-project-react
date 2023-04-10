@@ -1,13 +1,4 @@
-from datetime import datetime
-
 import pdfkit
-from api.permissions import IsAuthorOrReadOnly
-from api.serializers import (FollowSerializer, IngredientSerializer,
-                             RecipeListSerializer, RecipeSerializer,
-                             RecipeShortSerializer, TagSerializer,
-                             UserWithRecipesSerializer)
-from cookbook.models import (Favorite, Ingredient, IngredientAmount, Recipe,
-                             ShoppingCart, Tag)
 from django.contrib import messages
 from django.db.models import Sum
 from django.db.models.query_utils import Q
@@ -16,11 +7,20 @@ from django.http import (Http404, HttpResponse, HttpResponseRedirect,
 from django.shortcuts import get_object_or_404, render
 from django.template.loader import get_template
 from django.urls import reverse
+from django.utils import timezone
 from djoser import views
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+
+from api.permissions import IsAuthorOrReadOnly
+from api.serializers import (FollowSerializer, IngredientSerializer,
+                             RecipeListSerializer, RecipeSerializer,
+                             RecipeShortSerializer, TagSerializer,
+                             UserWithRecipesSerializer)
+from cookbook.models import (Favorite, Ingredient, IngredientAmount, Recipe,
+                             ShoppingCart, Tag)
 from users.models import Follow, User
 
 
@@ -71,17 +71,6 @@ class UserWithRecipesViewSet(
             return User.objects.filter(follows__user=self.request.user)
         return None
 
-    def create(self, request, *args, **kwargs):
-        request.data.update(author=self.get_author())
-        super().create(request, *args, **kwargs)
-        serializer = self.serializer_class(
-            instance=self.get_author(), context=self.get_serializer_context()
-        )
-        headers = self.get_success_headers(serializer.data)
-        return Response(
-            serializer.data, status=status.HTTP_201_CREATED, headers=headers
-        )
-
     def perform_create(self, serializer):
         serializer.save(author=self.get_author())
 
@@ -120,7 +109,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         data = {
             'page_objects': queryset,
             'user': user,
-            'created': datetime.now(),
+            'created': timezone.now(),
         }
 
         template = get_template('shopping_cart.html')

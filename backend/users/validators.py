@@ -3,8 +3,8 @@ from django.core.exceptions import ValidationError
 
 def validate_username(username):
     """Валидация имени пользователя."""
-    if username == 'me':
+    if username.lower() == 'me':
         raise ValidationError(
             'Невозможно создать пользователя с логином'
-            ' "me" - это запрещено.')
+            ' "%s" - это запрещено.' % username)
     return username

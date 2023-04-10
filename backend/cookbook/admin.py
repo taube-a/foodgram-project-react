@@ -54,7 +54,9 @@ class RecipeAdmin(admin.ModelAdmin):
     @admin.display(description='Тэги')
     def get_tags(self, obj):
         """Получаем теги."""
-        return ', '.join(_.name for _ in obj.tags.all())
+        return (', '
+                .join(tag for tag in obj.tags.values_list('name',
+                                                          flat=True)))
 
 
 @admin.register(Favorite)
