@@ -12,8 +12,7 @@ class UserAdmin(admin.ModelAdmin):
         'first_name',
         'last_name',
         'count_followers',
-        'count_recipes',
-    )
+        'count_recipes', )
     readonly_fields = ('count_followers', 'count_recipes')
     list_filter = ('username', 'email',)
     search_fields = ('username', 'email')

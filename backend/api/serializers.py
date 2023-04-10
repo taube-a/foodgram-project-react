@@ -3,10 +3,9 @@ from djoser import serializers as djoser_serializers
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers as serializers
 
+from api.custom_exception import GetRecipesError
 from cookbook.models import Ingredient, IngredientAmount, Recipe, Tag
 from users.models import Follow, User
-
-from .custom_exception import GetRecipesError
 
 
 class RecipeShortSerializer(serializers.ModelSerializer):
@@ -18,8 +17,7 @@ class RecipeShortSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'image',
-            'cooking_time',
-        )
+            'cooking_time', )
         read_only_fields = fields
 
 
