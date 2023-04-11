@@ -65,8 +65,8 @@ DATABASES = {
     'default': {
         'ENGINE': (env.get('DB_ENGINE') or os.getenv('DB_ENGINE')),
         'NAME': (env.get('DB_NAME') or os.getenv('DB_NAME')),
-        'USER': (env.get('USER') or os.getenv('USER')),
-        'PASSWORD': (env.get('PASSWORD') or os.getenv('PASSWORD')),
+        'USER': (env.get('DB_USER') or os.getenv('DB_USER')),
+        'PASSWORD': (env.get('DB_PASSWORD') or os.getenv('DB_PASSWORD')),
         'HOST': (env.get('DB_HOST') or os.getenv('DB_HOST')),
         'PORT': (env.get('DB_PORT') or os.getenv('DB_PORT')), }
 }
