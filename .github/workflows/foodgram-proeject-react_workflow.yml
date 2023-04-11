@@ -6,7 +6,6 @@ jobs:
   tests:
     name: Check for pep8
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python 
@@ -26,7 +25,7 @@ jobs:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     needs: tests
-    if: success() && github.ref == 'refs/heads/main'
+    if: success() && github.ref == 'refs/heads/master'
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2 
@@ -73,7 +72,7 @@ jobs:
   send_message:
     name: Notificate in telegram
     runs-on: ubuntu-latest
-    #needs: deploy
+    needs: build_and_push_to_docker_hub
     steps:
     - name: send message
       uses: appleboy/telegram-action@master
