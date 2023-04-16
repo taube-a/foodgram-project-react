@@ -24,9 +24,11 @@ services:
     restart: always
     volumes:
       - ../frontend/:/app/result_build/
+    depends_on:
+      - backend
   
   nginx:
-    image: nginx:1.19.3
+    image: nginx:1.21.3-alpine
     restart: always
     ports:
       - "80:80"
@@ -37,7 +39,7 @@ services:
       - static_value:/var/html/static/
       - media_value:/var/html/media/
     depends_on:
-      - backend
+      - frontend
   
 volumes:
   database: 
