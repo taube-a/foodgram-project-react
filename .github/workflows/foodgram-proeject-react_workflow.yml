@@ -63,7 +63,7 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
             sudo docker compose stop
-            sudo docker compose rm backend
+            sudo docker rm -f $(sudo docker ps -aq)
 
             touch .env
             echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
@@ -76,7 +76,7 @@ jobs:
 
             sudo docker pull taubeau/foodgram_frontend:latest
             sudo docker pull taubeau/foodgram:latest
-            sudo docker compose up -d --remove-orphans
+            sudo docker compose up -d
             sudo docker-compose exec foodgram python manage.py collectstatic --no-input
             sudo docker-compose exec foodgram python manage.py migrate
 
