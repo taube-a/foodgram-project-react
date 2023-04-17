@@ -5,7 +5,7 @@ from dotenv import dotenv_values
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-env = dict(dotenv_values('../infra/.env'))
+env = dict(dotenv_values(os.path.join(BASE_DIR, '../infra/.env')))
 
 SECRET_KEY = (env.get('SECRET_KEY') or os.getenv('SECRET_KEY'))
 

@@ -2,46 +2,43 @@ version: '3.8'
 
 services:
   db:
+    container_name: db
     image: postgres:13.0-alpine
     volumes:
-      - database:/var/lib/postgresql/data/
+      - db:/var/lib/postgresql/data/
     env_file:
       - ./.env
-  
   backend:
     image: taubeau/foodgram:latest
     restart: always
     volumes:
-      - static_value:/app/static/
-      - media_value:/app/media/
+      - backend_static:/app/static_backend/
+      - backend_media:/app/media/
     depends_on:
       - db
     env_file:
       - ./.env
-    
   frontend:
     image: taubeau/foodgram_frontend:latest
-    restart: always
     volumes:
       - ../frontend/:/app/result_build/
     depends_on:
       - backend
-  
   nginx:
     image: nginx:1.21.3-alpine
-    restart: always
     ports:
-      - "80:80"
+      - '80:80'
     volumes:
-      - .nginx.conf:/etc/nginx/conf.d 
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - ../frontend/build:/usr/share/nginx/html/
       - ../docs/:/usr/share/nginx/html/api/docs/
-      - static_value:/var/html/static/
-      - media_value:/var/html/media/
+      - backend_static:/var/html/static_backend/
+      - backend_media:/var/html/media/
+    restart: always
     depends_on:
       - frontend
-  
+
 volumes:
-  database: 
-  static_value:
-  media_value:
+  backend_static:
+  backend_media:
+  db:
