@@ -62,10 +62,10 @@ jobs:
             key: ${{ secrets.SSH_KEY }}
             passphrase: ${{ secrets.PASSPHRASE }}
             script: |
+              sudo docker stop $(sudo docker ps -a -q)
+              sudo docker rm $(sudo docker ps -a -q)
               sudo docker pull taubeau/foodgram:latest
               sudo docker pull taubeau/foodgram_frontend:latest
-              sudo docker compose stop
-              sudo docker rm backend
               touch .env
               echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
               echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
