@@ -9,6 +9,7 @@ services:
     env_file:
       - ./.env
   backend:
+    container_name: backend
     image: taubeau/foodgram:latest
     restart: always
     volumes:
@@ -19,12 +20,14 @@ services:
     env_file:
       - ./.env
   frontend:
+    container_name: frontend
     image: taubeau/foodgram_frontend:latest
     volumes:
       - ../frontend/:/app/result_build/
     depends_on:
       - backend
   nginx:
+    container_name: nginx
     image: nginx:1.21.3-alpine
     ports:
       - '80:80'
