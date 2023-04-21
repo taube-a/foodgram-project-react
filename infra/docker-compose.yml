@@ -8,17 +8,19 @@ services:
       - db:/var/lib/postgresql/data/
     env_file:
       - ./.env
+
   backend:
     container_name: backend
     image: taubeau/foodgram:latest
     restart: always
     volumes:
-      - backend_static:/app/static_backend/
+      - backend_static:/app/static/
       - backend_media:/app/media/
     depends_on:
       - db
     env_file:
       - ./.env
+
   frontend:
     container_name: frontend
     image: taubeau/foodgram_frontend:latest
@@ -26,6 +28,7 @@ services:
       - ../frontend/:/app/result_build/
     depends_on:
       - backend
+  
   nginx:
     container_name: nginx
     image: nginx:1.21.3-alpine
@@ -35,10 +38,11 @@ services:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - ../frontend/build:/usr/share/nginx/html/
       - ../docs/:/usr/share/nginx/html/api/docs/
-      - backend_static:/var/html/static_backend/
+      - backend_static:/var/html/static/
       - backend_media:/var/html/media/
     restart: always
     depends_on:
+      - backend
       - frontend
 
 volumes:

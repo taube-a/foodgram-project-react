@@ -66,6 +66,7 @@ jobs:
               sudo docker rm $(sudo docker ps -a -q)
               sudo docker pull taubeau/foodgram:latest
               sudo docker pull taubeau/foodgram_frontend:latest
+              sudo rm .env
               touch .env
               echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
               echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
