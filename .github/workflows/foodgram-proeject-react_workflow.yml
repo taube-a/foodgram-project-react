@@ -5,13 +5,12 @@ on: [push]
 jobs:
   tests:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: 3.7
+        python-version: 3.10
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip 
@@ -62,10 +61,10 @@ jobs:
             key: ${{ secrets.SSH_KEY }}
             passphrase: ${{ secrets.PASSPHRASE }}
             script: |
-              sudo docker stop $(sudo docker ps -a -q)
-              sudo docker rm $(sudo docker ps -a -q)
-              sudo docker pull taubeau/foodgram:latest
-              sudo docker pull taubeau/foodgram_frontend:latest
+              cd foodgram-project-react/
+              git pull
+
+              cd backend/
               sudo rm .env
               touch .env
               echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
@@ -75,7 +74,13 @@ jobs:
               echo DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> .env
               echo DB_HOST=${{ secrets.DB_HOST }} >> .env
               echo DB_PORT=${{ secrets.DB_PORT }} >> .env
-              sudo docker compose up -d
+
+              cd ../infra/
+              sudo docker stop $(sudo docker ps -a -q)
+              sudo docker rm $(sudo docker ps -a -q)
+              sudo docker pull {{ secrets.DOCKER_USERNAME }}/foodgram:latest
+              sudo docker pull {{ secrets.DOCKER_USERNAME }}/foodgram_frontend:latest
+              sudo docker-compose up -d --build
               sudo docker-compose exec -T backend python manage.py migrate
               sudo docker-compose exec -T backend python manage.py loaddata ./data/foodgram_db.json
               sudo docker-compose exec -T backend python manage.py collectstatic --no-input
