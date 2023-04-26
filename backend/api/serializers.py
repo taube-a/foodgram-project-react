@@ -24,11 +24,11 @@ class RecipeShortSerializer(serializers.ModelSerializer):
 class UserSerializer(djoser_serializers.UserSerializer):
     is_subscribed = serializers.SerializerMethodField()
 
-    def get_is_subscribed(self, author):
-        request = self.context['request']
+    def get_is_subscribed(self, user_object):
+        user = self.context['request'].user
         return (
-            request.user.is_authenticated
-            and author.Follows.filter(user=request.user).exists()
+            user.is_authenticated
+            and user.Follow.filter(user=user, author=user_object).exists()
         )
 
     class Meta(djoser_serializers.UserSerializer.Meta):

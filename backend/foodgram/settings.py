@@ -17,6 +17,12 @@ ALLOWED_HOSTS = ['158.160.29.172',
                  'localhost',
                  '*', ]
 
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1',
+                        'https://158.160.29.17',
+                        'https://localhost',
+                        'https://',
+                        ]
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
