@@ -61,11 +61,11 @@ jobs:
             key: ${{ secrets.SSH_KEY }}
             passphrase: ${{ secrets.PASSPHRASE }}
             script: |
-              sudo docker pull {{ secrets.DOCKER_USERNAME }}/foodgram_backend:latest
-              sudo docker pull {{ secrets.DOCKER_USERNAME }}/foodgram_frontend:latest
-
               sudo docker stop $(sudo docker ps -a -q)
               sudo docker rm $(sudo docker ps -a -q)
+
+              sudo docker pull taubeau/foodgram:latest
+              sudo docker pull taubeau/foodgram_frontend:latest
               
               sudo rm .env
               touch .env
@@ -79,7 +79,7 @@ jobs:
               echo POSTGRES_HOST_AUTH_METHOD=${{ secrets.POSTGRES_HOST_AUTH_METHOD }} >> .env
               
               sudo docker-compose up -d --build
-              sudo docker-compose exec backend python manage.py migrate -T 
+              sudo docker-compose exec -T backend python manage.py migrate
               sudo docker-compose exec -T backend python manage.py loaddata ./data/foodgram_db.json
               sudo docker-compose exec -T backend python manage.py collectstatic --no-input
 
