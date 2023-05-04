@@ -11,13 +11,9 @@ SECRET_KEY = (env.get('SECRET_KEY') or os.getenv('SECRET_KEY'))
 DEBUG = True
 
 ALLOWED_HOSTS = ['158.160.29.172',
-                 '127.0.0.1',
-                 'localhost',
                  '*', ]
 
-CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1',
-                        'https://158.160.29.17',
-                        'https://localhost',
+CSRF_TRUSTED_ORIGINS = ['https://158.160.29.17',
                         'https://',
                         ]
 
