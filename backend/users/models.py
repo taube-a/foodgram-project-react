@@ -53,7 +53,6 @@ class Follow(models.Model):
         if self.user.id == self.author.id:
             raise ValidationError(message='Нельзя подписываться на себя.')
 
-
     class Meta:
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'

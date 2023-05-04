@@ -59,7 +59,7 @@ class FollowSerializer(CustomUserCreateSerializer):
             'recipes_count', 'recipes'
         )
         read_only_fields = ('username', 'email',)
-    
+
     def get_is_subscribed(self, user_obj):
         user = self.context['request'].user
         return (
@@ -82,7 +82,7 @@ class FollowSerializer(CustomUserCreateSerializer):
 
     def get_recipes_count(self, obj):
         return obj.recipes.count()
-    
+
     def get_recipes(self, obj):
         request = self.context.get('request')
         limit = request.GET.get('recipes_limit')
@@ -146,14 +146,14 @@ class RecipeReadSerializer(serializers.ModelSerializer):
         return (
             user.is_authenticated
             and (user.carts.filter(recipe=recipe).exists()))
-    
+
     def get_ingredients(self, recipe):
         return recipe.ingredients.values(
             'id',
             'name',
             'measurement_unit',
             amount=F('ingredientamount__amount')
-        )   
+        )
 
 
 class RecipeWriteSerializer(serializers.ModelSerializer):
@@ -187,7 +187,7 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
                 recipe=recipe,
                 ingredient=item['ingredient'],
                 amount=item['amount'], )
-            for item in ingredientamount_set]
+             for item in ingredientamount_set]
         )
 
     def create(self, validated_data):

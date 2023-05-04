@@ -1,18 +1,17 @@
 from datetime import datetime
 
 from django.contrib import messages
-from django.contrib.auth import get_user_model
 from django.db.models import Sum
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
-from rest_framework.status import (HTTP_400_BAD_REQUEST, HTTP_201_CREATED,
-                                   HTTP_204_NO_CONTENT)
 from rest_framework.decorators import action
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.status import (HTTP_201_CREATED, HTTP_204_NO_CONTENT,
+                                   HTTP_400_BAD_REQUEST)
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from api.filters import IngredientFilter, RecipeFilter
@@ -26,8 +25,6 @@ from cookbook.models import (Favorite, Ingredient, IngredientAmount, Recipe,
                              ShoppingCart, Tag)
 from users.models import Follow, User
 
-
-User = get_user_model()
 
 class TagViewSet(ReadOnlyModelViewSet):
     serializer_class = TagSerializer
