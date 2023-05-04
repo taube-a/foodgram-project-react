@@ -8,12 +8,12 @@ env = dict(dotenv_values(os.path.join(BASE_DIR, '../infra/.env')))
 
 SECRET_KEY = (env.get('SECRET_KEY') or os.getenv('SECRET_KEY'))
 
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['158.160.29.172',
+ALLOWED_HOSTS = [(env.get('ALLOWED_HOST') or os.getenv('ALLOWED_HOST')),
                  '*', ]
 
-CSRF_TRUSTED_ORIGINS = ['https://158.160.29.17',
+CSRF_TRUSTED_ORIGINS = [(env.get('CSRF_TRUSTED_ORIGIN') or os.getenv('CSRF_TRUSTED_ORIGIN')),
                         'https://',
                         ]
 
