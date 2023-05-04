@@ -2,7 +2,6 @@ from colorfield.fields import ColorField
 from django.core import validators
 from django.core.validators import MinValueValidator
 from django.db import models
-
 from users.models import User
 
 
@@ -11,8 +10,7 @@ class Tag(models.Model):
     name = models.CharField(
         verbose_name='Название',
         max_length=200,
-        unique=True,
-        help_text='Введите название тега.', )
+        unique=True, )
     color = ColorField(
         'Цветовой HEX-код',
         unique=True,
@@ -24,20 +22,17 @@ class Tag(models.Model):
         ],
         error_messages={'unique': 'Данный цвет уже существует.'
                                   'Выберите другой.'},
-        help_text='Введите код цвета в формате HEX.'
+        help_text='Код цвета в формате HEX.'
                   'Образец: #XXXXXX, где XXXXXX - код.', )
     slug = models.SlugField(
         verbose_name='Адрес',
         unique=True,
         max_length=200,
-        validators=[validators.validate_slug],
-        help_text='Введите адрес для тега.'
-                  'Допускаются только латиница цифры, знаки подчёркивания,'
-                  ' дефисы.', )
+        validators=[validators.validate_slug], )
 
     class Meta:
-        verbose_name = 'тег'
-        verbose_name_plural = 'теги'
+        verbose_name = 'Тег'
+        verbose_name_plural = 'Теги'
         ordering = ('name',)
 
     def __str__(self):
@@ -60,11 +55,6 @@ class Ingredient(models.Model):
     class Meta:
         verbose_name = 'ингридиент'
         verbose_name_plural = 'ингридиенты'
-        constraints = [
-            models.UniqueConstraint(
-                fields=['name', 'measurement_unit'], name='unique ingredient'
-            )
-        ]
         ordering = ('name', )
 
     def __str__(self):
@@ -136,7 +126,6 @@ class IngredientAmount(models.Model):
     ingredient = models.ForeignKey(
         Ingredient,
         on_delete=models.CASCADE,
-        related_name='recipe',
         verbose_name='Ингридиент', )
     amount = models.PositiveIntegerField(
         verbose_name='Количество',
@@ -147,7 +136,7 @@ class IngredientAmount(models.Model):
 
     class Meta:
         verbose_name = 'количество ингридиента'
-        verbose_name_plural = 'количество ингридиентов'
+        verbose_name_plural = 'количества ингридиента'
         constraints = [
             models.UniqueConstraint(
                 fields=['ingredient', 'recipe'],
@@ -157,7 +146,6 @@ class IngredientAmount(models.Model):
                 check=models.Q(amount__gte=1),
                 name='ingredientamount_amount_range'),
         ]
-        ordering = ('-id',)
 
     def __str__(self):
         return (f'{self.ingredient} {self.amount}'
@@ -174,11 +162,11 @@ class Favorite(models.Model):
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        related_name='favorites',
         verbose_name='Рецепт',
     )
 
     class Meta:
+        default_related_name = 'favorites'
         verbose_name = 'избранный рецепт'
         verbose_name_plural = 'избранные рецепты'
         constraints = (

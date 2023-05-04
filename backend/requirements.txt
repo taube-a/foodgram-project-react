@@ -3,7 +3,6 @@ djangorestframework
 djoser
 drf-extra-fields
 Pillow
-pdfkit
 django-colorfield
 pytz
 python-dotenv

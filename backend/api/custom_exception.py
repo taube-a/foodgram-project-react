@@ -1,2 +1,0 @@
-class GetRecipesError(Exception):
-    pass
