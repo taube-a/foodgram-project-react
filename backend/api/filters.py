@@ -1,5 +1,6 @@
-from cookbook.models import Ingredient, Recipe, Tag
 from django_filters.rest_framework import FilterSet, filters
+
+from cookbook.models import Ingredient, Recipe, Tag
 
 
 class IngredientFilter(FilterSet):
@@ -34,5 +35,5 @@ class RecipeFilter(FilterSet):
     def filter_is_in_shopping_cart(self, queryset, name, value):
         user = self.request.user
         if value and not user.is_anonymous:
-            return queryset.filter(shopping_cart__user=user)
+            return queryset.filter(in_carts__user=user)
         return queryset
